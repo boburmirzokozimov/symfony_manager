@@ -1,0 +1,11 @@
+<ul class="nav nav-tabs mb-4">
+    <li class="nav-item">
+        <a class="nav-link active" href="{{ path('work.projects.project',{ 'id':project.id }) }}">Dashboard</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link " href="{{ path('work.projects.project.settings',{ 'id':project.id }) }}">Settings</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link " href="{{ path('work.projects.project.tasks',{ 'project_id':project.id }) }}">Tasks</a>
+    </li>
+</ul>

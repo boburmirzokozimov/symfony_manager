@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Members{% endblock %}
+
+
+{% block breadcrumbs %}
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ path('home') }}">Home</a></li>
+        <li class="breadcrumb-item active">Members</li>
+    </ol>
+{% endblock %}
+
+{% block body %}
+    {{ include('app/work/members/member/_tabs.html.twig') }}
+
+    <div class="card my-1">
+        <div class="card-header">Profile</div>
+        <div class="card-body">
+            <table class="table table-bordered my-1 table-hover">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Group</th>
+                    <th>Projects</th>
+                    <th>Status</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for member in members %}
+                    <tr>
+                        <th>
+                            <a href="{{ path('work.members.member.show',{'id': member.id}) }}">{{ member.name }}</a>
+                        </th>
+                        <th>{{ member.email }}</th>
+                        <th>{{ member.group }}</th>
+                        <th>{{ member.membership_count }}</th>
+                        <th>{{ user_status(member.status) }}</th>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+
+{% endblock %}

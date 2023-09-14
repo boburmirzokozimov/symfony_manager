@@ -1,0 +1,63 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Members{% endblock %}
+
+
+{% block breadcrumbs %}
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ path('home') }}">Home</a></li>
+        <li class="breadcrumb-item active">Projects</li>
+    </ol>
+{% endblock %}
+
+{% block body %}
+
+    {{ include('app/work/projects/project/_tabs.html.twig') }}
+
+    <div class="controls">
+        <a href="{{ path('work.projects.create') }}" class="btn btn-success">Add Project</a>
+        <a href="{{ path('work.projects.calendar') }}" class="btn btn-success">Calendar</a>
+    </div>
+
+    {{ form_start(form) }}
+    <div class="row">
+        <div class="col-md-4">{{ form_widget(form.name) }}</div>
+        <div class="col-md-4">{{ form_widget(form.status) }}</div>
+        <div class="col-md-4">
+            <button type="submit" class="btn btn-primary">Filter</button>
+            <a href="{{ path('work.projects') }}" class="btn btn-outline-secondary">Reset</a>
+        </div>
+    </div>
+    {{ form_end(form) }}
+
+    <div class="card my-1">
+        <div class="card-header">Projects</div>
+        <div class="card-body">
+            <table class="table table-bordered my-1 table-hover">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Status</th>
+                    <th>Sort</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for project in pagination %}
+                    <tr>
+                        <th>
+                            <a href="{{ path('work.projects.project',{'id': project.id}) }}">{{ project.name }}</a>
+                        </th>
+                        <th>{{ project.status }}</th>
+                        <th>{{ project.sort }}</th>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+
+    <div class="navigation">
+        {{ knp_pagination_render(pagination) }}
+    </div>
+{% endblock %}

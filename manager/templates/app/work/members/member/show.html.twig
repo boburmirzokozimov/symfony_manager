@@ -1,0 +1,87 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Members{% endblock %}
+
+{% block breadcrumbs %}
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ path('home') }}">Home</a></li>
+        <li class="breadcrumb-item"><a href="{{ path('work.members.member') }}">Members</a></li>
+        <li class="breadcrumb-item active">{{ member.name }}</li>
+    </ol>
+{% endblock %}
+
+{% block body %}
+    {{ include('app/work/members/member/_tabs.html.twig') }}
+
+
+    <div class="controls">
+        <a href="{{ path('work.members.member.edit',{ 'id': member.id}) }}" class="btn btn-primary">Edit</a>
+        <a href="{{ path('work.members.member.move',{ 'id': member.id}) }}" class="btn btn-primary">Move</a>
+        {% if member.active and member.id.value != app.user.id %}
+            <form action="{{ path('work.members.member.archive', {'id': member.id}) }}" method="post"
+                  onsubmit="return confirm('Are you sure?')">
+                <input type="hidden" name="token" value="{{ csrf_token('archive') }}"/>
+                <button type="submit" class="btn btn-danger">Archive</button>
+            </form>
+        {% endif %}
+        {% if member.archived %}
+            <form action="{{ path('work.members.member.archive', {'id': member.id}) }}" method="post"
+                  onsubmit="return confirm('Are you sure?')">
+                <input type="hidden" name="token" value="{{ csrf_token('reinstate') }}"/>
+                <button type="submit" class="btn btn-success">Reinstate</button>
+            </form>
+        {% endif %}
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <table class="table table-bordered my-1 table-hover">
+                <tbody>
+                <tr>
+                    <th class="fw-bold">Name</th>
+                    <td>{{ member.name }}</td>
+                </tr>
+                <tr>
+                    <th class="fw-bold">Email</th>
+                    <td>{{ member.email }}</td>
+                </tr>
+                <tr>
+                    <th class="fw-bold">Group</th>
+                    <td>{{ member.group.name }}</td>
+                </tr>
+                <tr>
+                    <th class="fw-bold">Status</th>
+                    <td>{{ member_status(member.status) }}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    {% if departments %}
+        <div class="card">
+            <div class="card-body">
+                <table class="table table-bordered my-1 table-hover">
+                    <thead>
+                    <tr>
+                        <th class="fw-bold">Project</th>
+                        <th class="fw-bold">Department</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for department in departments %}
+                        <tr>
+                            <td>
+                                <a href="{{ path('work.projects.project', {'id': department.project_id}) }}">{{ department.project_name }}</a>
+                            </td>
+                            <td>{{ department.department_name }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    {% endif %}
+
+{% endblock %}

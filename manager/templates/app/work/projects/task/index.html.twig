@@ -1,0 +1,113 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Members{% endblock %}
+
+
+{% block breadcrumbs %}
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ path('home') }}">Home</a></li>
+        {% if project %}
+            <li class="breadcrumb-item"><a
+                        href="{{ path('work.projects.project',{ 'id':project.id }) }}">{{ project.name }}</a></li>
+        {% endif %}
+        <li class="breadcrumb-item active">Tasks</li>
+    </ol>
+{% endblock %}
+
+{% block body %}
+
+    {{ include('app/work/projects/task/_tabs.html.twig') }}
+
+    {% if  project %}
+        <div class="controls">
+            <a href="{{ path('work.projects.project.tasks.create',{'project_id':project.id}) }}"
+               class="btn btn-success">Add
+                Task</a>
+        </div>
+    {% endif %}
+    {{ form_start(form) }}
+    <div class="row mb-3">
+        <div class="col-md-3">{{ form_widget(form.type) }}</div>
+        <div class="col-md-3">{{ form_widget(form.status) }}</div>
+        <div class="col-md-2">{{ form_widget(form.priority) }}</div>
+        <div class="col-md-2">{{ form_widget(form.executor) }}</div>
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-primary">Filter</button>
+            {% if project %}
+                <a href="{{ path('work.projects.project.tasks',{ 'project_id':project.id}) }}"
+                   class="btn btn-outline-secondary">Reset</a>
+            {% endif %}
+            {% if not project %}
+                <a href="{{ path('work.projects.tasks') }}"
+                   class="btn btn-outline-secondary">Reset</a>
+            {% endif %}
+        </div>
+    </div>
+    {{ form_end(form) }}
+
+    <div class="card my-1">
+        <div class="card-header">Tasks</div>
+        <div class="card-body">
+            <table class="table table-bordered my-1 table-hover">
+                <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Date</th>
+                    <th>Author</th>
+                    {% if not project %}
+                        <th>Project</th>
+                    {% endif %}
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Priority</th>
+                    <th>Executors</th>
+                    <th>Plan</th>
+                    <th>Status</th>
+                    <th>Ready</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for task in pagination %}
+                    <tr>
+                        <th>
+                            {{ task.id }}
+                        </th>
+                        <th>{{ task.date|date('Y-m-d H:i') }}</th>
+                        <th>{{ task.author_name }}</th>
+                        {% if not project %}
+                            <th>
+                                <a href="{{ path('work.projects.project',{ 'id':task.project_id }) }}">{{ task.project_name }}</a>
+                            </th>
+                        {% endif %}
+                        <th>
+                            <a href="{{ path('work.projects.tasks.show',{ 'id':task.id }) }}">{{ task.name }}</a>
+                        </th>
+                        <th>{{ task_type(task.type) }}</th>
+                        <th>{{ task_priority(task.priority) }}</th>
+                        <th>
+                            {% if task.executors %}
+                                {% for executor in task.executors %}
+                                    <span class="badge bg-secondary d-flex mb-1"> {{ executor.name }}</span>
+                                {% endfor %}
+                            {% endif %}
+                        </th>
+                        <th>{{ task.plan }}</th>
+                        <th>{{ task_status(task.status) }}</th>
+                        <th>
+                            {% if task.progress %}
+                                {{ task_progress(task.progress) }}
+                            {% endif %}
+                        </th>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+
+    <div class="navigation">
+        {{ knp_pagination_render(pagination) }}
+    </div>
+
+{% endblock %}

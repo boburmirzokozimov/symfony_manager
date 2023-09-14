@@ -1,0 +1,24 @@
+<ul class="nav nav-tabs mb-4">
+    <li class="nav-item">
+        <a class="nav-link " href="{{ path('work.projects.project',{ 'id':project.id }) }}">Dashboard</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link active" href="{{ path('work.projects.project.settings',{ 'id':project.id }) }}">Settings</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link " href="{{ path('work.projects.project.tasks',{ 'project_id':project.id }) }}">Tasks</a>
+    </li>
+</ul>
+<ul class="nav nav-tabs mb-4">
+    <li class="nav-item">
+        <a class="nav-link active" href="{{ path('work.projects.project',{ 'id':project.id }) }}">Common</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link  "
+           href="{{ path('work.projects.project.settings.departments',{ 'project_id':project.id }) }}">Departments</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link  "
+           href="{{ path('work.projects.project.settings.membership',{ 'project_id':project.id }) }}">Members</a>
+    </li>
+</ul>

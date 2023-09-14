@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Project{% endblock %}
+
+
+{% block breadcrumbs %}
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ path('home') }}">Home</a></li>
+        <li class="breadcrumb-item"><a href="{{ path('work.projects') }}">Projects</a></li>
+        <li class="breadcrumb-item "><a href="{{ path('work.projects.roles') }}">Roles</a></li>
+        <li class="breadcrumb-item active">{{ role.name }}</li>
+    </ol>
+{% endblock %}
+
+{% block body %}
+
+    <div class="controls">
+        <a href="{{ path('work.projects.roles.role.edit',{ 'id': role.id}) }}" class="btn btn-primary">Edit</a>
+        <form action="{{ path('work.projects.roles.role.delete', {'id': role.id}) }}" method="post"
+              onsubmit="return confirm('Are you sure?')">
+            <input type="hidden" name="token" value="{{ csrf_token('delete') }}"/>
+            <button type="submit" class="btn btn-danger">Remove</button>
+        </form>
+        <a href="{{ path('work.projects.roles.role.copy',{'id': role.id}) }}"
+           class="btn btn-primary">Copy</a>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <table class="table table-bordered my-1 table-hover">
+                <tbody>
+                <tr>
+                    <th class="fw-bold">Name</th>
+                    <td>{{ role.name }}</td>
+                </tr>
+                <tr>
+                    <th class="fw-bold">Permissions</th>
+                    <td>
+                        {% for permission in role.permissions %}
+                            {{ permission.name|trans({},'work_permissions') }}
+                        {% endfor %}
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+{% endblock %}

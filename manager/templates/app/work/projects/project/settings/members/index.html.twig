@@ -1,0 +1,82 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Groups{% endblock %}
+
+{% block breadcrumbs %}
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ path('home') }}">Home</a></li>
+        <li class="breadcrumb-item"><a href="{{ path('work.projects') }}">Projects</a></li>
+        <li class="breadcrumb-item "><a
+                    href="{{ path('work.projects.project',{ 'id': project.id }) }}">{{ project.name }}</a></li>
+        <li class="breadcrumb-item "><a
+                    href="{{ path('work.projects.project.settings',{ 'id': project.id }) }}">Settings</a></li>
+        <li class="breadcrumb-item active">Departments</li>
+    </ol>
+{% endblock %}
+
+{% block body %}
+    {{ include('app/work/projects/project/settings/members/_tabs2.html.twig') }}
+
+    <div class="controls">
+        <a href="{{ path('work.projects.project.settings.membership.assign',{ 'project_id': project.id }) }}"
+           class="btn btn-success">
+            Assign Member
+        </a>
+    </div>
+
+    <div class="card my-1">
+        <div class="card-body">
+            <table class="table table-bordered my-1 table-hover">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Departments</th>
+                    <th>Roles</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% set token = csrf_token('revoke') %}
+                {% for membership in memberships %}
+                    <tr>
+                        <td>
+                            {{ membership.member.name }}<a
+                                    href="{{ path('work.members.member.show', {'id': membership.member.id}) }}"
+                                    target="_blank"
+                                    class="pull-right"><span class="fa fa-external-link"></span></a>
+
+                        </td>
+                        <td>
+                            <ul class="list-unstyled my-0">
+                                {% for department in membership.departments %}
+                                    <li>{{ department.name }}</li>
+                                {% endfor %}
+                            </ul>
+                        </td>
+                        <td>
+                            <ul class="list-unstyled my-0">
+                                {% for role in membership.roles %}
+                                    <li>{{ role.name }}</li>
+                                {% endfor %}
+                            </ul>
+                        </td>
+                        <td>
+                            <div class="d-flex flex-row">
+                                <a href="{{ path('work.projects.project.settings.membership.edit', {'project_id': project.id, 'membership': membership.id}) }}"
+                                   class="btn btn-sm btn-primary mr-1"><span class="fa fa-pencil"></span></a>
+                                <form action="{{ path('work.projects.project.settings.membership.revoke', {'project_id': project.id, 'membership': membership.id}) }}"
+                                      method="post" onsubmit="return confirm('Are you sure?')">
+                                    <input type="hidden" name="token" value="{{ token }}"/>
+                                    <button type="submit" class="btn btn-sm btn-danger"><span
+                                                class="fa fa-times"></span></button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+{% endblock %}

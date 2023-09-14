@@ -1,0 +1,15 @@
+controllers:
+  resource: ../src/Controller/
+  type: attribute
+app.swagger_ui:
+  path: /api/doc
+  methods: GET
+  defaults: { _controller: nelmio_api_doc.controller.swagger_ui }
+api:
+  resource: ../src/Controller/Api/
+  prefix: /api/v2
+  name_prefix: api.
+  trailing_slash_on_root: false
+  type: attribute
+  defaults:
+    _formats: json
